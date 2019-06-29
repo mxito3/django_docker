@@ -1,0 +1,12 @@
+version: '2'
+services:
+  django:
+    container_name: django
+    image: yapie/mysite
+    working_dir: /code 
+    ports:
+      - 8000:8000
+  
+
+
+ 

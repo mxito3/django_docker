@@ -10,6 +10,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
 WORKDIR /code
 ADD . /code/
 RUN pip install -i https://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com -r requirements.txt
-CMD bash -c 'python manage.py runserver 0.0.0.0:8000'
+CMD bash -c 'gunicorn mysite.wsgi:application -b 0.0.0.0:8000'
+# 开放的端口
 EXPOSE 8000
 

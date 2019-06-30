@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'mysite.middleware.StatsMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -105,7 +106,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai' 
+
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -118,3 +121,78 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#日志
+LOG_PATH = os.path.join(BASE_DIR, "log/")
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s '
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file':{
+            'level':'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'formatter':'verbose',
+            'filename':LOG_PATH+"request.log",
+        },
+    },
+    'loggers': {
+        # 'django': {   #详细的
+        #     'handlers': ['console'],
+        #     'propagate': False,
+        # },
+        'django.request': {   #只显示404和500
+        'handlers': ['console'],
+        'propagate': False,
+        'level': 'DEBUG',
+        },
+        'django.server': {   #具体请求的url
+            'handlers': ['file','console'],
+            'propagate':False,
+            'level': 'DEBUG',
+        },
+        'django.db.backends': {  #数据库
+            'handlers': ['console','file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': True,
+#     'formatters': {
+#         'verbose': {
+#             'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s'
+#         }
+#     },
+#     'handlers': {
+#         'gunicorn': {
+#             'level': 'DEBUG',
+#             'class': 'logging.handlers.RotatingFileHandler',
+#             'formatter': 'verbose',
+#             'filename': 'gunicorn.errors',
+#             'maxBytes': 1024 * 1024 * 100,  # 100 mb
+#         }
+#     },
+#     'loggers': {
+#         'gunicorn.errors': {
+#             'level': 'DEBUG',
+#             'handlers': ['gunicorn'],
+#             'propagate': True,
+#         },
+#     }
+# }

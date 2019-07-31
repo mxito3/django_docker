@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-
+from django.http import HttpResponse
+def test(request):
+    return HttpResponse('this is hello after upgrade 2 time ')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^test/',test)
 ]
